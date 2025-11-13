@@ -29,7 +29,8 @@ public class Bota extends Calzado {
 
     @Override
     public String toString() {
-        return "Bota:" + getCodigoSKU()+" "+getMarca()+" "+getModelo() +" "+getFechaDeLanzamiento()+" "+getTalla()
-                + " Impermeable: " + (waterProof ? "si" : "no");
+        return "Bota con código SKU: " + getCodigoSKU()+", marca: "+getMarca()+", modelo: "+getModelo()
+                +", fecha de lanzamiento: "+getFechaDeLanzamiento()+", talla: "+getTalla()
+                + ", impermeable: " + (waterProof ? "si" : "no");
     }
 }

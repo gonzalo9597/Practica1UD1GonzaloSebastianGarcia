@@ -8,24 +8,26 @@ import javax.swing.SpinnerNumberModel;
 
 public class Ventana {
     private JPanel panel1;
-    public JRadioButton deportivaRadioButton;
-    public JRadioButton botaRadioButton;
-    public JRadioButton sandaliaRadioButton;
-    public ButtonGroup buttonGroup1;
-    public JTextField codigoSKUTxt;
-    public JTextField marcaTxt;
-    public JTextField modeloTxt;
-    public JButton nuevoButton;
-    public JButton exportarButton;
-    public JButton importarButton;
-    public JList<Calzado> list1;
-    public DatePicker fechaDeLanzamientoDPicker;
-    public JComboBox deporteBox;
-    public JSpinner tallaSpinner;
-    public JCheckBox siCheckBox;
-    public JLabel WaterProofAbierta;
-    public JButton editarButton;
-    public JButton borrarButton;
+    JRadioButton deportivaRadioButton;
+    JRadioButton botaRadioButton;
+    JRadioButton sandaliaRadioButton;
+    ButtonGroup buttonGroup1;
+    JTextField codigoSKUTxt;
+    JTextField marcaTxt;
+    JTextField modeloTxt;
+    JButton nuevoButton;
+    JButton exportarButton;
+    JButton importarButton;
+    JList<Calzado> list1;
+    DatePicker fechaDeLanzamientoDPicker;
+    JComboBox deporteBox;
+    JSpinner tallaSpinner;
+    JCheckBox siCheckBox;
+    JLabel WaterProofAbierta;
+    JButton eliminarButton;
+    JButton borrarButton;
+    JLabel deporteLabel;
+    JRadioButton darkRadioButton;
 
     //declarado por mi
     public JFrame frame;
@@ -39,6 +41,8 @@ public class Ventana {
         frame.pack();
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
+        frame.setIconImage(new ImageIcon("src/calzado.png").getImage());
+        //FALTAAAAAA
 
         initComponents();
     }

@@ -44,20 +44,9 @@ public class CalzadosControlador implements ActionListener, ListSelectionListene
         addListSelectionListener(this);
     }
 
-    private boolean hayCamposVacios() {
-        if (vista.codigoSKUTxt.getText().isEmpty() ||
-                vista.marcaTxt.getText().isEmpty() ||
-                vista.modeloTxt.getText().isEmpty() ||
-                vista.fechaDeLanzamientoDPicker.getText().isEmpty()){
-            return true;
-        }
-        return false;
-    }
-
     private void limpiarCampos() {
-        vista.deportivaRadioButton.setSelected(false);
         vista.buttonGroup1.clearSelection();
-        //como los tres botones pertenecen a un grupo, con poner uno en false y borrar seleccción se resetean todos
+        //como los tres botones pertenecen a un grupo, borrar seleccción del botón del grupo y se resetean todos
         vista.codigoSKUTxt.setText(null);
         vista.marcaTxt.setText(null);
         vista.modeloTxt.setText(null);
@@ -73,13 +62,14 @@ public class CalzadosControlador implements ActionListener, ListSelectionListene
     //listener botones
     private void addActionListener(ActionListener listener) {
         vista.nuevoButton.addActionListener(listener);
-        vista.editarButton.addActionListener(listener);
+        vista.eliminarButton.addActionListener(listener);
         vista.borrarButton.addActionListener(listener);
         vista.importarButton.addActionListener(listener);
         vista.exportarButton.addActionListener(listener);
         vista.deportivaRadioButton.addActionListener(listener);
         vista.botaRadioButton.addActionListener(listener);
         vista.sandaliaRadioButton.addActionListener(listener);
+        vista.darkRadioButton.addActionListener(listener);
     }
 
     //listener ventana (boton cerrar)
@@ -132,8 +122,18 @@ public class CalzadosControlador implements ActionListener, ListSelectionListene
                     Util.mensajeError("Ya existe un calzado con el código SKU " +
                             "\n"+vista.codigoSKUTxt.getText());
                     break;
-                } else if (vista.marcaTxt.getText().equals("")){
+                } else if (vista.codigoSKUTxt.getText().isEmpty()) {
+                    Util.mensajeError("Debes escribir el código SKU del calzado");
+                    break;
+                } else if (vista.marcaTxt.getText().isEmpty()){
                     Util.mensajeError("Debes escribir la marca del calzado");
+                    break;
+                } else if (vista.modeloTxt.getText().isEmpty()){
+                    Util.mensajeError("Debes escribir el modelo del calzado");
+                    break;
+                }else if (vista.fechaDeLanzamientoDPicker.getText().isEmpty()){
+                    Util.mensajeError("Debes escribir la fecha de lanzamiento del calzado");
+                    break;
                 }
                 if (vista.deportivaRadioButton.isSelected()) {
                     modelo.altaDeportiva(vista.codigoSKUTxt.getText(),vista.marcaTxt.getText(),
@@ -145,13 +145,22 @@ public class CalzadosControlador implements ActionListener, ListSelectionListene
                 } else if (vista.botaRadioButton.isSelected()){
                     modelo.altaBota(vista.codigoSKUTxt.getText(),vista.marcaTxt.getText(),
                             vista.modeloTxt.getText(),vista.fechaDeLanzamientoDPicker.getDate(),
-                            Double.parseDouble(vista.tallaSpinner.getValue().toString()), true);
-                           // vista.siCheckBox.getSelectedItem().);
+                            Double.parseDouble(vista.tallaSpinner.getValue().toString()), vista.siCheckBox.isSelected());
+                } else if (vista.sandaliaRadioButton.isSelected()){
+                    modelo.altaSandalia(vista.codigoSKUTxt.getText(),vista.marcaTxt.getText(),
+                            vista.modeloTxt.getText(),vista.fechaDeLanzamientoDPicker.getDate(),
+                            Double.parseDouble(vista.tallaSpinner.getValue().toString()), vista.siCheckBox.isSelected());
                 }
                 limpiarCampos();
                 refrescar();
+                System.out.println(modelo.obtenerCalzados());
+
                 break;
-            case "Editar":
+            case "Eliminar calzado":
+                Calzado calzadoAEliminar = vista.list1.getSelectedValue();
+                modelo.eliminarCalzado(calzadoAEliminar);
+                limpiarCampos();
+                refrescar();
                 break;
             case "Borrar campos":
                 limpiarCampos();
@@ -190,19 +199,24 @@ public class CalzadosControlador implements ActionListener, ListSelectionListene
             case "Deportiva":
                 vista.WaterProofAbierta.setVisible(false);
                 vista.siCheckBox.setVisible(false);
-                //FALTA
+                vista.deporteBox.setVisible(true);
+                vista.deporteLabel.setVisible(true);
                 break;
             case "Bota":
+                vista.deporteBox.setVisible(false);
+                vista.deporteLabel.setVisible(false);
                 vista.WaterProofAbierta.setText("WaterProof");
                 vista.WaterProofAbierta.setVisible(true);
                 vista.siCheckBox.setVisible(true);
                 vista.siCheckBox.setSelected(false);
-                //FALTA
                 break;
             case "Sandalia":
+                vista.deporteBox.setVisible(false);
+                vista.deporteLabel.setVisible(false);
                 vista.WaterProofAbierta.setText("Abierta");
                 vista.WaterProofAbierta.setVisible(true);
                 vista.siCheckBox.setVisible(true);
+                vista.siCheckBox.setSelected(false);
                 break;
         }
     }
@@ -228,21 +242,43 @@ public class CalzadosControlador implements ActionListener, ListSelectionListene
             vista.marcaTxt.setText(calzadoSeleccionado.getMarca());
             vista.modeloTxt.setText(calzadoSeleccionado.getModelo());
             vista.fechaDeLanzamientoDPicker.setDate(calzadoSeleccionado.getFechaDeLanzamiento());
+            vista.tallaSpinner.setValue(calzadoSeleccionado.getTalla());
+
             if (calzadoSeleccionado instanceof Deportiva) {
                 vista.deportivaRadioButton.doClick();
-                //vista.kmsPlazasTxt.setText(String.valueOf(((Coche) calzadoSeleccionado).getNumPlazas()));
-                //FALTA
+                vista.deporteBox.setSelectedItem(((Deportiva) calzadoSeleccionado).getDeporte());
+
             } else if (calzadoSeleccionado instanceof Bota){
                 vista.botaRadioButton.doClick();
-                //vista.kmsPlazasTxt.setText(String.valueOf(((Moto)calzadoSeleccionado).getKms()));
-                //FALTA
+                if (((Bota) calzadoSeleccionado).isWaterProof()){
+                    vista.siCheckBox.setSelected(true);
+
+                } else{
+                    vista.siCheckBox.setSelected(false);
+                }
+
             } else if (calzadoSeleccionado instanceof Sandalia) {
-                vista.botaRadioButton.doClick();
+                vista.sandaliaRadioButton.doClick();
+                if (((Sandalia) calzadoSeleccionado).isAbierta()){
+                    vista.siCheckBox.setSelected(true);
+                } else{
+                    vista.siCheckBox.setSelected(false);
+                }
             }
         }
     }
 
     //no los uso
+
+    private boolean hayCamposVacios() {
+        if (vista.codigoSKUTxt.getText().isEmpty() ||
+                vista.marcaTxt.getText().isEmpty() ||
+                vista.modeloTxt.getText().isEmpty() ||
+                vista.fechaDeLanzamientoDPicker.getText().isEmpty()){
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public void windowOpened(WindowEvent e) {

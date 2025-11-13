@@ -61,6 +61,11 @@ public class CalzadosModelo {
         listaCalzados.add(nuevaSandalia);
     }
 
+    //eliminarCalzado
+    public void eliminarCalzado(Calzado calzadoAEliminar){
+        listaCalzados.remove(calzadoAEliminar);
+    }
+
     //existeCodigoSKU
     public boolean existeCodigoSKU(String codigoSKU) {
         for (Calzado unCalzado : listaCalzados) {
@@ -198,7 +203,7 @@ public class CalzadosModelo {
                 nuevaBota.setTalla(Double.parseDouble(nodoCalzado.getChildNodes().item(4).getTextContent()));
                 nuevaBota.setWaterProof(Boolean.parseBoolean(nodoCalzado.getChildNodes().item(5).getTextContent()));
                 listaCalzados.add(nuevaBota);
-            } else{
+            } else if (nodoCalzado.getTagName().equals("Sandalia")){
                 nuevaSandalia =new Sandalia();
                 nuevaSandalia.setCodigoSKU(nodoCalzado.getChildNodes().item(0).getTextContent());
                 nuevaSandalia.setMarca(nodoCalzado.getChildNodes().item(1).getTextContent());
