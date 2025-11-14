@@ -13,11 +13,12 @@ import javax.swing.*;
 public class Principal {
     public static void main(String[] args) {
         //aquí importamos librería de flatlaf del archivo ejecutable
-        try {
-            UIManager.setLookAndFeel(new FlatMacLightLaf());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+            try {
+                UIManager.setLookAndFeel(new FlatMacLightLaf());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         Ventana vista = new Ventana();
         CalzadosModelo modelo = new CalzadosModelo();
         CalzadosControlador controlador = new CalzadosControlador(vista,modelo);

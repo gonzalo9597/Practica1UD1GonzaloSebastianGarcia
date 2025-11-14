@@ -41,8 +41,7 @@ public class Ventana {
         frame.pack();
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
-        frame.setIconImage(new ImageIcon("src/calzado.png").getImage());
-        //FALTAAAAAA
+        frame.setIconImage(new ImageIcon("src/jordan.png").getImage());
 
         initComponents();
     }
