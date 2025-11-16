@@ -26,10 +26,10 @@ public class Bota extends Calzado {
     public String getWaterProof() {
         return waterProof ? "si" : "no";
     }
-
+//si waterProof es true, se convierte return "si", si es false "no" (lo mismo con abierta en Sandalia)
     @Override
     public String toString() {
-        return "Bota con código SKU: " + getCodigoSKU()+", marca: "+getMarca()+", modelo: "+getModelo()
+        return "BOTA con código SKU: " + getCodigoSKU()+", marca: "+getMarca()+", modelo: "+getModelo()
                 +", fecha de lanzamiento: "+getFechaDeLanzamiento()+", talla: "+getTalla()
                 + ", impermeable: " + (waterProof ? "si" : "no");
     }

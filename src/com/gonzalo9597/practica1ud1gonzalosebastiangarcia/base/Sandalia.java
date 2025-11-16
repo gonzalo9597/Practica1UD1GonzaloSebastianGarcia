@@ -27,7 +27,7 @@ public class Sandalia extends Calzado{
 
     @Override
     public String toString() {
-        return "Sandalia con código SKU: " + getCodigoSKU()+", marca: "+getMarca()+", modelo: "+getModelo()
+        return "SANDALIA con código SKU: " + getCodigoSKU()+", marca: "+getMarca()+", modelo: "+getModelo()
                 +", fecha de lanzamiento: "+getFechaDeLanzamiento()+", talla: "+getTalla() + ", abierta: "
                 + (abierta ? "si" : "no");
     }

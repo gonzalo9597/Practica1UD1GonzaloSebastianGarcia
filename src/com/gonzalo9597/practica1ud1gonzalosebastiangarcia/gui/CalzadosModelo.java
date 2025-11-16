@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 public class CalzadosModelo {
     private ArrayList<Calzado> listaCalzados;
+    //creamos la lista de Calzados
 
     public CalzadosModelo() {
         listaCalzados = new ArrayList<Calzado>();
@@ -30,6 +31,7 @@ public class CalzadosModelo {
     public ArrayList<Calzado> obtenerCalzados(){
         return listaCalzados;
     }
+    //creamos método obtenerCalzados, que nos devuelve la lista de Calzados
 
     //altaDeportiva
     public void altaDeportiva(String codigoSKU, String marca,
@@ -106,7 +108,7 @@ public class CalzadosModelo {
 
             //dentro de la etiqueta calzado
             //tengo deportiva bota y sandalia
-            //atributos comunes (codigoSKU,marca,modelo,fechaDeLanzamiento,talla)
+            // por lo que primero declaro los atributos comunes (codigoSKU,marca,modelo,fechaDeLanzamiento,talla)
 
             nodoDatos=documento.createElement("codigoSKU");
             nodoCalzado.appendChild(nodoDatos);
@@ -129,12 +131,14 @@ public class CalzadosModelo {
             nodoDatos=documento.createElement("fecha-de-lanzamiento");
             nodoCalzado.appendChild(nodoDatos);
 
+            //tengo que convertir un LocalDate en String, para eso parseamos con String.valueOf
             texto=documento.createTextNode(String.valueOf(unCalzado.getFechaDeLanzamiento()));
             nodoDatos.appendChild(texto);
 
             nodoDatos=documento.createElement("talla");
             nodoCalzado.appendChild(nodoDatos);
 
+            //tengo que convertir un Double en String, para eso parseamos con String.valueOf
             texto=documento.createTextNode(String.valueOf(unCalzado.getTalla()));
             nodoDatos.appendChild(texto);
 
@@ -144,15 +148,19 @@ public class CalzadosModelo {
                 nodoDatos=documento.createElement("deporte");
                 nodoCalzado.appendChild(nodoDatos);
 
+                //para añadir los atributos específicos de cada Objeto hijo, se hace de la siguiente manera:
                 texto=documento.createTextNode(((Deportiva) unCalzado).getDeporte());
                 nodoDatos.appendChild(texto);
             } else if(unCalzado instanceof Bota) {
                 nodoDatos=documento.createElement("waterProof");
                 nodoCalzado.appendChild(nodoDatos);
 
+                //en caso de que el atributo no sea String, se debe parsear también
                 texto=documento.createTextNode(String.valueOf(((Bota) unCalzado).getWaterProof()));
                 nodoDatos.appendChild(texto);
-            } else{
+
+                //importante especificar en el else if el último tipo de objeto, NO usar else
+            } else if (unCalzado instanceof Sandalia){
                 nodoDatos=documento.createElement("abierta");
                 nodoCalzado.appendChild(nodoDatos);
 
@@ -175,12 +183,14 @@ public class CalzadosModelo {
         Deportiva nuevaDeportiva =null;
         Bota nuevaBota =null;
         Sandalia nuevaSandalia=null;
+        //declaramos e inicializamos a null la lista de Calzados, ya que la vamos a ir completando con los objetos del XML
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document documento = builder.parse(fichero);
 
         NodeList listaElementos = documento.getElementsByTagName("*");
+        //hacemos una lista de los nodos para recorrer el XML y añadir cada calzado con sus atributos en la listaCalzados
 
         for (int i=0;i<listaElementos.getLength();i++) {
             Element nodoCalzado= (Element) listaElementos.item(i);
@@ -192,7 +202,9 @@ public class CalzadosModelo {
                 nuevaDeportiva.setModelo(nodoCalzado.getChildNodes().item(2).getTextContent());
                 nuevaDeportiva.setFechaDeLanzamiento(LocalDate.parse(nodoCalzado.getChildNodes().item(3).getTextContent()));
                 nuevaDeportiva.setTalla(Double.parseDouble(nodoCalzado.getChildNodes().item(4).getTextContent()));
+                //parseamos si el atributo no es un String
                 nuevaDeportiva.setDeporte(nodoCalzado.getChildNodes().item(5).getTextContent());
+                //añadimos el calzado creado a la listaCalzados
                 listaCalzados.add(nuevaDeportiva);
             } else if(nodoCalzado.getTagName().equals("Bota")){
                 nuevaBota =new Bota();

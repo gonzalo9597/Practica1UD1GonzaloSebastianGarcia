@@ -85,10 +85,12 @@ public class CalzadosControlador implements ActionListener, ListSelectionListene
     }
 
     public void refrescar() {
+        //borramos todos los calzados que hay en el dlm
         vista.dlmCalzados.clear();
         //modelo.obtenerCalzados -> contiene la lista de calzados
         for (Calzado unCalzado : modelo.obtenerCalzados()) {
             vista.dlmCalzados.addElement(unCalzado);
+            //añadimos todos los calzados al dlm (el nuevo incluido)
         }
     }
 
@@ -136,7 +138,7 @@ public class CalzadosControlador implements ActionListener, ListSelectionListene
                 if (vista.deportivaRadioButton.isSelected()) {
                     modelo.altaDeportiva(vista.codigoSKUTxt.getText(), vista.marcaTxt.getText(),
                             vista.modeloTxt.getText(), vista.fechaDeLanzamientoDPicker.getDate(),
-                            //como del Spinner se puede sacar solo el valor a String, hay que castear a doble
+                            //como del Spinner solo se puede sacar el valor a String, hay que castear a Double
                             Double.parseDouble(vista.tallaSpinner.getValue().toString()),
                             vista.deporteBox.getSelectedItem().toString());
                     //para sacar el valor del ComboBox, getSelectedItem
@@ -152,17 +154,19 @@ public class CalzadosControlador implements ActionListener, ListSelectionListene
                 limpiarCampos();
                 refrescar();
                 System.out.println(modelo.obtenerCalzados());
-
                 break;
+
             case "Eliminar calzado":
                 Calzado calzadoAEliminar = vista.list1.getSelectedValue();
                 modelo.eliminarCalzado(calzadoAEliminar);
                 limpiarCampos();
                 refrescar();
                 break;
+
             case "Borrar campos":
                 limpiarCampos();
                 break;
+
             case "Importar":
                 JFileChooser selectorFichero = Util.crearSelectorFichero(ultimaRutaExportada
                         , "Archivos XML", "xml");
@@ -180,6 +184,7 @@ public class CalzadosControlador implements ActionListener, ListSelectionListene
                     refrescar();
                 }
                 break;
+
             case "Exportar":
                 JFileChooser selectorFichero2 = Util.crearSelectorFichero(ultimaRutaExportada
                         , "Archivos XML", "xml");
@@ -194,12 +199,14 @@ public class CalzadosControlador implements ActionListener, ListSelectionListene
                     }
                 }
                 break;
+
             case "Deportiva":
                 vista.WaterProofAbierta.setVisible(false);
                 vista.siCheckBox.setVisible(false);
                 vista.deporteBox.setVisible(true);
                 vista.deporteLabel.setVisible(true);
                 break;
+
             case "Bota":
                 vista.deporteBox.setVisible(false);
                 vista.deporteLabel.setVisible(false);
@@ -208,6 +215,7 @@ public class CalzadosControlador implements ActionListener, ListSelectionListene
                 vista.siCheckBox.setVisible(true);
                 vista.siCheckBox.setSelected(false);
                 break;
+
             case "Sandalia":
                 vista.deporteBox.setVisible(false);
                 vista.deporteLabel.setVisible(false);
@@ -216,6 +224,7 @@ public class CalzadosControlador implements ActionListener, ListSelectionListene
                 vista.siCheckBox.setVisible(true);
                 vista.siCheckBox.setSelected(false);
                 break;
+
             case "Dark Mode":
                 try {
                     if (vista.darkRadioButton.isSelected()) {
@@ -224,7 +233,7 @@ public class CalzadosControlador implements ActionListener, ListSelectionListene
                         UIManager.setLookAndFeel(new FlatMacLightLaf());
                     }
 
-                    // Actualizar todo el árbol de componentes
+                    //actualizamos todo el arbol de componentes
                     SwingUtilities.updateComponentTreeUI(vista.frame);
 
                 } catch (Exception ex) {
@@ -235,19 +244,24 @@ public class CalzadosControlador implements ActionListener, ListSelectionListene
     }
 
     @Override
-    public void windowClosing(WindowEvent e) { //CAMBIAR YES/NO
+    public void windowClosing(WindowEvent e) {
         int resp = Util.mensajeConfirmacion("¿Desea cerrar la ventana?", "Salir");
         if (resp == JOptionPane.OK_OPTION) {
             try {
-                guardarConfiguracion();
-                System.exit(0);
+                //ponemos la condición distinto a null para evitar null pointer exception
+                if (ultimaRutaExportada != null) {
+                    guardarConfiguracion();
+                }
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
+            System.exit(0);
+            //lo sacamos del try-catch para que siempre que le demos a exit se salga de la app
         }
     }
 
     @Override
+    //en este metodo, cogemos los datos del calzado seleccionado de list1 y los plasmamos en los txt correspondientes
     public void valueChanged(ListSelectionEvent e) {
         if (e.getValueIsAdjusting()) {
             Calzado calzadoSeleccionado = vista.list1.getSelectedValue();
@@ -255,6 +269,7 @@ public class CalzadosControlador implements ActionListener, ListSelectionListene
             vista.marcaTxt.setText(calzadoSeleccionado.getMarca());
             vista.modeloTxt.setText(calzadoSeleccionado.getModelo());
             vista.fechaDeLanzamientoDPicker.setDate(calzadoSeleccionado.getFechaDeLanzamiento());
+            //tambien nos cogeria setText en el DPicker
             vista.tallaSpinner.setValue(calzadoSeleccionado.getTalla());
 
             if (calzadoSeleccionado instanceof Deportiva) {

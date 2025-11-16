@@ -41,7 +41,8 @@ public class Ventana {
         frame.pack();
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
-        frame.setIconImage(new ImageIcon("src/jordan.png").getImage());
+        frame.setIconImage(new ImageIcon(getClass().getResource("/jordan.png")).getImage());
+        //metemos la imagen del icono de esta forma, para que cuando creemos el JAR nos la coja
 
         initComponents();
     }
@@ -49,13 +50,13 @@ public class Ventana {
         dlmCalzados =new DefaultListModel<Calzado>();
         list1.setModel(dlmCalzados);
 
-        // Configurar ButtonGroup para los radio buttons
+        //creamos un ButtonGroup para los radiobuttons del tipo de calzado
         buttonGroup1 = new ButtonGroup();
         buttonGroup1.add(deportivaRadioButton);
         buttonGroup1.add(botaRadioButton);
         buttonGroup1.add(sandaliaRadioButton);
 
-        //Configuración del JSpinner para tallas
+        //configuramos el JSpinner de tallas
         SpinnerNumberModel modeloTallas = new SpinnerNumberModel(
                 36, // valor inicial
                 36, // valor mínimo

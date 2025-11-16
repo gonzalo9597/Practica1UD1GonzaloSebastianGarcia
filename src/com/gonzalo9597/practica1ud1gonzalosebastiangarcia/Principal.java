@@ -12,7 +12,8 @@ import javax.swing.*;
 
 public class Principal {
     public static void main(String[] args) {
-        //aquí importamos librería de flatlaf del archivo ejecutable
+        //aquí importamos librería de flatlaf del archivo ejecutable y la convertimos en interfaz principal
+        //IMPORTANTE hacer try catch antes de crear la ventana, sino no se visualiza la librería
 
             try {
                 UIManager.setLookAndFeel(new FlatMacLightLaf());

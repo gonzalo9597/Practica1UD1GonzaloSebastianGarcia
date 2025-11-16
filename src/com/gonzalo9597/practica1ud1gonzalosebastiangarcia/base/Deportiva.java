@@ -25,7 +25,7 @@ public class Deportiva extends Calzado {
 
     @Override
     public String toString() {
-        return "Deportiva con código SKU: " + getCodigoSKU() + ", marca: " + getMarca() + ", modelo: " + getModelo()
+        return "DEPORTIVA con código SKU: " + getCodigoSKU() + ", marca: " + getMarca() + ", modelo: " + getModelo()
                 + ", fecha de lanzamiento: " + getFechaDeLanzamiento()
                 + ", talla: " + getTalla() + ", deporte: " + getDeporte();
     }

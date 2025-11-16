@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: com.gonzalo9597.practica1ud1gonzalosebastiangarcia.Principal
+
